@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import { HttpCode, NodeEnv, ErrMessagesDefaults } from '../../core/constants';
 import { envs } from '../../core/config/env';
@@ -40,11 +39,11 @@ function getInfoItem(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function errorHandler(err: any, _req: Request, res: Response, _next: NextFunction) {
+export function errorHandler(err: AppError, _req: Request, res: Response, _next: NextFunction) {
     console.error(err.stack);
 
-    err.statusCode = getInfoItem(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR);
-    err.status = getInfoItem(err.status, ErrMessagesDefaults.ERR_STR) ;
+    err.statusCode = getInfoItem(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR) as number;
+    err.status = getInfoItem(err.status, ErrMessagesDefaults.ERR_STR) as string;
 
     const error = { ...err };
     console.log("------- begin -------");
