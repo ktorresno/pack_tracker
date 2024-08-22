@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { HttpCode, NodeEnv, ErrMessagesDefaults } from '../../core/constants';
 import { envs } from '../../core/config/env';
 import { AppError } from './AppError';
@@ -21,19 +21,22 @@ function productionError (err: AppError, res: Response) {
 };
 
 const developmentError = (err: AppError, res: Response) => {
-    res.status(err.statusCode).json({
+    const responseObj = {
         status: err.status,
         message: err.message,
-        error: err,
+        //error: err,
         stack: err.stack
-    });
+    }
+    console.log('developmentError: ', responseObj);
+    console.log('err.isOperational: ', err.isOperational);
+    res.status(err.statusCode).json(responseObj);
 }
 
 function getInfoItem(infoItem: any, defaultValue: any) {
     return infoItem || defaultValue;
 }
 
-export function errorHandler(err: any, req: Request, res: Response) {
+export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
     console.error(err.stack);
 
     err.statusCode = getInfoItem(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR);
