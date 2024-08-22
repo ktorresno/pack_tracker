@@ -32,11 +32,15 @@ const developmentError = (err: AppError, res: Response) => {
     res.status(err.statusCode).json(responseObj);
 }
 
-function getInfoItem(infoItem: any, defaultValue: any) {
+function getInfoItem(
+    infoItem: string | number,
+    defaultValue: string | number
+): string | number {
     return infoItem || defaultValue;
 }
 
-export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function errorHandler(err: any, _req: Request, res: Response, _next: NextFunction) {
     console.error(err.stack);
 
     err.statusCode = getInfoItem(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR);

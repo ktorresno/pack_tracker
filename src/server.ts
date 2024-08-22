@@ -19,6 +19,12 @@ export class Server {
         this.port = port;
     }
 
+    testingInitialPoint = (req: Request, res: Response) => {
+        return res.status(HttpCode.OK).send({
+            message: `Welcome to Initial API! \n Endpoints available at http://localhost:${(this.port)}/`
+        });
+    }
+
     async start(): Promise<void> {
         //* Middlewares
         this.app.use(express.json()); // parse json in request body (allow raw)
@@ -35,11 +41,7 @@ export class Server {
         this.app.use(errorHandler);
 
         // Test rest api
-        this.app.get('/', (_req: Request, res: Response) => {
-            return res.status(HttpCode.OK).send({
-                message: `Welcome to Initial API! \n Endpoints available at http://localhost:${this.port}/`
-            });
-        });
+        this.app.get('/', this.testingInitialPoint);
 
         this.app.listen(this.port, () => {
             console.log(`Server running on port ${this.port}...`);
