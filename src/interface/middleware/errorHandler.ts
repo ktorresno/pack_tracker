@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpCode, NodeEnv, ErrMessagesDefaults } from '../../core/constants';
 import { envs } from '../../core/config/env';
-import { AppError } from './AppError';
+import { AppErrOptions, AppError, customErrOptions } from './AppError';
+import { ensureError } from '../common/utilErrors';
 
 function productionError (err: AppError, res: Response) {
     // Operational error: send message to client about the error
     if (err.isOperational) {
         res.status(err.statusCode).json({
-            status: err.status,
             message: err.message
         });
     } else {
@@ -20,36 +20,36 @@ function productionError (err: AppError, res: Response) {
 };
 
 const developmentError = (err: AppError, res: Response) => {
-    const responseObj = {
-        status: err.status,
+    const responseObj: customErrOptions = {
         message: err.message,
-        //error: err,
+        cause: err,
         stack: err.stack
     }
     console.log('developmentError: ', responseObj);
-    console.log('err.isOperational: ', err.isOperational);
     res.status(err.statusCode).json(responseObj);
 }
 
-function getInfoItem(
-    infoItem: string | number,
-    defaultValue: string | number
-): string | number {
-    return infoItem || defaultValue;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function errorHandler(err: AppError, req: Request, res: Response, _: NextFunction) {
+    const statusCode: number = getStatusCode(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR) as number;
+    const errOptions: AppErrOptions = {
+        cause: ensureError(err),
+        context: { ...req.body }
+    };
+
+    const appError = new AppError(
+        "An error occurred: ",
+        statusCode,
+        errOptions
+    );
+    checkErrorByEnv(appError, res);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function errorHandler(err: AppError, _req: Request, res: Response, _next: NextFunction) {
-    console.error(err.stack);
-
-    err.statusCode = getInfoItem(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR) as number;
-    err.status = getInfoItem(err.status, ErrMessagesDefaults.ERR_STR) as string;
-
-    const error = { ...err };
-    console.log("------- begin -------");
-    console.log("Error: ", error);
-    console.log("------- end -------");
-    checkErrorByEnv(error, res);
+function getStatusCode(
+    currentValue: string | number | undefined,
+    defaultValue: string | number
+): string | number {
+    return currentValue || defaultValue;
 }
 
 function checkErrorByEnv(err: AppError, res: Response) {

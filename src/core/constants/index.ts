@@ -1,6 +1,7 @@
-export const SIXTY = 60 as const;
-export const ONE_HUNDRED = 100 as const;
-export const ONE_THOUSAND = 1000 as const;
+export const SIXTY = 60;
+export const ONE_HUNDRED = 100;
+export const ONE_THOUSAND = 1000;
+export const WILDCARD_ASTERISK = '*';
 
 export enum HttpCode {
     OK = 200,

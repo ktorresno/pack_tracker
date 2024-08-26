@@ -1,14 +1,38 @@
+type JsonOjb = string | number | boolean | null | undefined |
+                readonly JsonOjb[] |
+                { readonly [key: string]: JsonOjb } |
+                 { toJSON(): JsonOjb }
+export interface AppErrOptions {
+    cause?: Error;
+    context?: JsonOjb;
+}
+
+export interface customErrOptions {
+    message: string,
+    cause?: Error,
+    stack: string | undefined
+}
+
 export class AppError extends Error {
+    public readonly context?: JsonOjb;
+    public readonly isOperational: boolean;
+    public readonly statusCode: number;
 
-    statusCode: number;
-    status: string;
-    isOperational: boolean;
+    constructor(
+        message: string,
+        statusCode: number,
+        options: AppErrOptions = {}
+    ) {
+        const { cause, context } = options;
 
-    constructor(message: string, statusCode: number) {
-        super(message);
+        super(message, { cause });
+        this.name = this.constructor.name
+
+        this.context = context;
         this.statusCode = statusCode;
-        this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
         this.isOperational = true;
+
         Error.captureStackTrace(this, this.constructor);
     }
+
 }
