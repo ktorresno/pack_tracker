@@ -1,10 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpCode, NodeEnv, ErrMessagesDefaults } from '../../core/constants';
 import { envs } from '../../core/config/env';
-import { AppErrOptions, AppError, customErrOptions } from './AppError';
-import { ensureError } from '../common/utilErrors';
+import { AppErrOptions, AppError } from './AppError';
+import { ensureError, errorResult } from '../common/utilErrors';
+import { logger } from '../../infrastructure/logger';
 
-function productionError (err: AppError, res: Response) {
+function productionError (err: AppError, res: Response): void {
+    // Construct the message to be written in the log file
+    const customObject = errorResult(err);
+    logger.error(customObject);
+
     // Operational error: send message to client about the error
     if (err.isOperational) {
         res.status(err.statusCode).json({
@@ -19,18 +24,15 @@ function productionError (err: AppError, res: Response) {
     }
 };
 
-const developmentError = (err: AppError, res: Response) => {
-    const responseObj: customErrOptions = {
-        message: err.message,
-        cause: err,
-        stack: err.stack
-    }
-    console.log('developmentError: ', responseObj);
-    res.status(err.statusCode).json(responseObj);
-}
+function developmentError (err: AppError, res: Response): void {
+    // Construct the message to be written in the log file
+    const customObject = errorResult(err);
+    logger.error(customObject);
+    res.status(err.statusCode).json(customObject);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function errorHandler(err: AppError, req: Request, res: Response, _: NextFunction) {
+export function errorHandler(err: AppError, req: Request, res: Response, _: NextFunction): void {
     const statusCode: number = getStatusCode(err.statusCode, HttpCode.INTERNAL_SERVER_ERROR) as number;
     const errOptions: AppErrOptions = {
         cause: ensureError(err),
