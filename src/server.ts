@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import { HttpCode, ONE_HUNDRED, ONE_THOUSAND, SIXTY, WILDCARD_ASTERISK } from './core/constants';
 import { errorHandler } from './interface/middleware/errorHandler';
 import { AppError } from './interface/middleware/AppError';
+import { logger } from './infrastructure/logger';
 
 interface ServerOptions {
     port: number;
@@ -38,7 +39,7 @@ export class Server {
         );
 
         this.app.listen(this.port, () => {
-            console.log(`Server running on port ${this.port}...`);
+            logger.info(`Server running on port ${this.port}...`);
         });
 
         // Test rest api
