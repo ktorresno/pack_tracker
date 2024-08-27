@@ -2,15 +2,10 @@ type JsonOjb = string | number | boolean | null | undefined |
                 readonly JsonOjb[] |
                 { readonly [key: string]: JsonOjb } |
                  { toJSON(): JsonOjb }
+
 export interface AppErrOptions {
     cause?: Error;
     context?: JsonOjb;
-}
-
-export interface customErrOptions {
-    message: string,
-    cause?: Error,
-    stack: string | undefined
 }
 
 export class AppError extends Error {
