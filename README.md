@@ -1,17 +1,18 @@
 # Parcel Tracking App
 
-**Tracking** is the process of gathering and management of information related to the current location of products or delivery items.
+**Tracking** is the process of gathering and management of information related
+to the current location of products or delivery items.
 
-Effective tracking doesn't just improve
-customer satisfaction; it also empowers companies with
-precise Estimated Time of Arrival (**ETA**), ultimately
-elevating the overall quality of the service.
+Effective tracking doesn't just improve customer satisfaction; it also empowers
+companies with precise Estimated Time of Arrival (**ETA**), ultimately elevating
+the overall quality of the service.
 
-The objective of this app is to provide information to the customers about their packages status across all the delivery process from its order placement until its arrival to its destiny.
+The objective of this app is to provide information to the customers about their
+packages status across all the delivery process from its order placement until
+its arrival to its destiny.
 
-Nowadays, parcels carry bars or QR codes can hold much
-more information than a simple package number.
-The software can record:
+Nowadays, parcels carry bars or QR codes can hold much more information than a
+simple package number. The software can record:
 
 - The history of where the parcel has been.
 - Its content.
@@ -39,13 +40,19 @@ parcel is scanned for the last time.
 ## Shipment
 
 A shipment is the total consignment of goods transported from Consignor to Consignee.
-Consignment is a form of business in which a vendor maintains a stock of materials at a customer site. The vendor retains ownership of the materials until they are withdrawn from the consignment stores.
+Consignment is a form of business in which a vendor maintains a stock of materials
+at a customer site. The vendor retains ownership of the materials until they are
+withdrawn from the consignment stores.
 
 ## Business Process and Role Model
 
-- Order placed by receiving party, handled by the Sales department, processed by the Warehouse Department and transported by the LSP(Logistic Service Provider).
-- The Transport order placed by the Sales Department at the LSP, to transport shipping units of service parts according to delivery schedule to the receiving party.
-- The tracking information of shipping units captured at certain events during the transportation process by a source (scanner).
+- Order placed by receiving party, handled by the Sales department, processed by
+the Warehouse Department and transported by the LSP(Logistic Service Provider).
+- The Transport order placed by the Sales Department at the LSP, to transport
+shipping units of service parts according to delivery schedule to the receiving
+party.
+- The tracking information of shipping units captured at certain events during
+the transportation process by a source (scanner).
 
 ## Different types of Delivery Status
 
